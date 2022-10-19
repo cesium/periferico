@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
-import { parse } from 'rss-to-json'
+import Parser from 'rss-parser'
 
 import { useAudioPlayer } from '@/components/AudioProvider'
 import { Container } from '@/components/Container'
@@ -126,37 +126,24 @@ export default function Home({ episodes }) {
 }
 
 export async function getStaticProps() {
-  let feed = await parse('https://anchor.fm/s/54719978/podcast/rss')
+  const parser = new Parser()
 
-  const props = {
-    episodes: feed.items.map(
-      ({ title, description, enclosures, published }, index) => ({
-        id: feed.items.length - index,
-        title,
-        published,
-        description,
-        audio: enclosures.map((enclosure) => ({
-          src: enclosure.url,
-          type: enclosure.type,
-        }))[0],
-      })
-    ),
-  }
+  let feed = await parser.parseURL('https://anchor.fm/s/54719978/podcast/rss')
 
-  console.log(props)
+  console.log(feed.items[0])
 
   return {
     props: {
       episodes: feed.items.map(
-        ({ title, description, enclosures, published }, index) => ({
-          id: feed.items.length - index,
+        ({ guid, title, contentSnippet, enclosure, pubDate }) => ({
+          id: guid,
           title,
-          published,
-          description,
-          audio: enclosures.map((enclosure) => ({
+          published: pubDate,
+          description: contentSnippet,
+          audio: {
             src: enclosure.url,
             type: enclosure.type,
-          }))[0],
+          },
         })
       ),
     },
