@@ -126,14 +126,31 @@ export default function Home({ episodes }) {
 }
 
 export async function getStaticProps() {
-  let feed = await parse('https://their-side-feed.vercel.app/api/feed')
+  let feed = await parse('https://anchor.fm/s/54719978/podcast/rss')
+
+  const props = {
+    episodes: feed.items.map(
+      ({ title, description, enclosures, published }, index) => ({
+        id: feed.items.length - index,
+        title,
+        published,
+        description,
+        audio: enclosures.map((enclosure) => ({
+          src: enclosure.url,
+          type: enclosure.type,
+        }))[0],
+      })
+    ),
+  }
+
+  console.log(props)
 
   return {
     props: {
       episodes: feed.items.map(
-        ({ id, title, description, enclosures, published }) => ({
-          id,
-          title: `${id}: ${title}`,
+        ({ title, description, enclosures, published }, index) => ({
+          id: feed.items.length - index,
+          title,
           published,
           description,
           audio: enclosures.map((enclosure) => ({

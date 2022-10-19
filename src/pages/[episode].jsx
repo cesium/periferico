@@ -60,11 +60,14 @@ export default function Episode({ episode }) {
 }
 
 export async function getStaticProps({ params }) {
-  let feed = await parse('https://their-side-feed.vercel.app/api/feed')
+  let feed = await parse('https://anchor.fm/s/54719978/podcast/rss')
+
+  console.log(feed)
+
   let episode = feed.items
-    .map(({ id, title, description, content, enclosures, published }) => ({
-      id: id.toString(),
-      title: `${id}: ${title}`,
+    .map(({ title, description, content, enclosures, published }, index) => ({
+      id: (feed.items.length - index).toString(),
+      title,
       description,
       content,
       published,
@@ -90,12 +93,12 @@ export async function getStaticProps({ params }) {
 }
 
 export async function getStaticPaths() {
-  let feed = await parse('https://their-side-feed.vercel.app/api/feed')
+  let feed = await parse('https://anchor.fm/s/54719978/podcast/rss')
 
   return {
-    paths: feed.items.map(({ id }) => ({
+    paths: feed.items.map(({}, index) => ({
       params: {
-        episode: id.toString(),
+        episode: index.toString(),
       },
     })),
     fallback: 'blocking',
