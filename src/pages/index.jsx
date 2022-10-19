@@ -130,8 +130,6 @@ export async function getStaticProps() {
 
   let feed = await parser.parseURL('https://anchor.fm/s/54719978/podcast/rss')
 
-  console.log(feed.items[0])
-
   return {
     props: {
       episodes: feed.items.map(
