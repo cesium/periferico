@@ -85,9 +85,9 @@ function EpisodeEntry({ episode }) {
             <Link
               href={`/${episode.id}`}
               className="flex items-center text-sm font-bold leading-6 text-orangecesium-500 hover:text-orangecesium-600 active:text-orangecesium-600"
-              aria-label={`Show notes for episode ${episode.title}`}
+              aria-label={`More info of episode ${episode.title}`}
             >
-              Show notes
+              More Info
             </Link>
           </div>
         </div>
