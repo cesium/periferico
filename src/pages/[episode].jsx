@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import Head from 'next/head'
-import { parse } from 'rss-to-json'
+import Parser from 'rss-parser'
 
 import { useAudioPlayer } from '@/components/AudioProvider'
 import { Container } from '@/components/Container'
@@ -60,18 +60,21 @@ export default function Episode({ episode }) {
 }
 
 export async function getStaticProps({ params }) {
-  let feed = await parse('https://their-side-feed.vercel.app/api/feed')
+  const parser = new Parser()
+
+  let feed = await parser.parseURL('https://anchor.fm/s/54719978/podcast/rss')
+
   let episode = feed.items
-    .map(({ id, title, description, content, enclosures, published }) => ({
-      id: id.toString(),
-      title: `${id}: ${title}`,
-      description,
+    .map(({ title, contentSnippet, content, enclosure, pubDate }, index) => ({
+      id: (feed.items.length - index).toString(),
+      title,
+      description: contentSnippet,
       content,
-      published,
-      audio: enclosures.map((enclosure) => ({
+      published: pubDate,
+      audio: {
         src: enclosure.url,
         type: enclosure.type,
-      }))[0],
+      },
     }))
     .find(({ id }) => id === params.episode)
 
@@ -90,12 +93,14 @@ export async function getStaticProps({ params }) {
 }
 
 export async function getStaticPaths() {
-  let feed = await parse('https://their-side-feed.vercel.app/api/feed')
+  const parser = new Parser()
+
+  let feed = await parser.parseURL('https://anchor.fm/s/54719978/podcast/rss')
 
   return {
-    paths: feed.items.map(({ id }) => ({
+    paths: feed.items.map(({}, index) => ({
       params: {
-        episode: id.toString(),
+        episode: (feed.items.length - index).toString(),
       },
     })),
     fallback: 'blocking',

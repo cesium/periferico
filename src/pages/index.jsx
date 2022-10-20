@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
-import { parse } from 'rss-to-json'
+import Parser from 'rss-parser'
 
 import { useAudioPlayer } from '@/components/AudioProvider'
 import { Container } from '@/components/Container'
@@ -85,9 +85,9 @@ function EpisodeEntry({ episode }) {
             <Link
               href={`/${episode.id}`}
               className="flex items-center text-sm font-bold leading-6 text-orangecesium-500 hover:text-orangecesium-600 active:text-orangecesium-600"
-              aria-label={`Show notes for episode ${episode.title}`}
+              aria-label={`More info of episode ${episode.title}`}
             >
-              Show notes
+              More Info
             </Link>
           </div>
         </div>
@@ -126,20 +126,22 @@ export default function Home({ episodes }) {
 }
 
 export async function getStaticProps() {
-  let feed = await parse('https://their-side-feed.vercel.app/api/feed')
+  const parser = new Parser()
+
+  let feed = await parser.parseURL('https://anchor.fm/s/54719978/podcast/rss')
 
   return {
     props: {
       episodes: feed.items.map(
-        ({ id, title, description, enclosures, published }) => ({
-          id,
-          title: `${id}: ${title}`,
-          published,
-          description,
-          audio: enclosures.map((enclosure) => ({
+        ({ title, contentSnippet, enclosure, pubDate }, index) => ({
+          id: feed.items.length - index,
+          title,
+          published: pubDate,
+          description: contentSnippet,
+          audio: {
             src: enclosure.url,
             type: enclosure.type,
-          }))[0],
+          },
         })
       ),
     },
