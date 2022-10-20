@@ -133,8 +133,8 @@ export async function getStaticProps() {
   return {
     props: {
       episodes: feed.items.map(
-        ({ guid, title, contentSnippet, enclosure, pubDate }) => ({
-          id: guid,
+        ({ title, contentSnippet, enclosure, pubDate }, index) => ({
+          id: feed.items.length - index,
           title,
           published: pubDate,
           description: contentSnippet,

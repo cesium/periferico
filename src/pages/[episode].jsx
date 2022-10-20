@@ -65,8 +65,8 @@ export async function getStaticProps({ params }) {
   let feed = await parser.parseURL('https://anchor.fm/s/54719978/podcast/rss')
 
   let episode = feed.items
-    .map(({ guid, title, contentSnippet, content, enclosure, pubDate }) => ({
-      id: guid,
+    .map(({ title, contentSnippet, content, enclosure, pubDate }, index) => ({
+      id: (feed.items.length - index).toString(),
       title,
       description: contentSnippet,
       content,
@@ -98,9 +98,9 @@ export async function getStaticPaths() {
   let feed = await parser.parseURL('https://anchor.fm/s/54719978/podcast/rss')
 
   return {
-    paths: feed.items.map(({ guid }) => ({
+    paths: feed.items.map(({}, index) => ({
       params: {
-        episode: guid,
+        episode: (feed.items.length - index).toString(),
       },
     })),
     fallback: 'blocking',
