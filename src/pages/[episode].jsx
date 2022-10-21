@@ -26,7 +26,7 @@ export default function Episode({ episode }) {
   return (
     <>
       <Head>
-        <title>{`${episode.title} - Their Side`}</title>
+        <title>{`${episode.title} - Periférico`}</title>
         <meta name="description" content={episode.description} />
       </Head>
       <article className="py-16 lg:py-36">
@@ -68,7 +68,7 @@ export async function getStaticProps({ params }) {
     .map(({ title, contentSnippet, content, enclosure, pubDate }, index) => ({
       id: (feed.items.length - index).toString(),
       title,
-      description: contentSnippet,
+      description: contentSnippet.split('\n')[0],
       content,
       published: pubDate,
       audio: {

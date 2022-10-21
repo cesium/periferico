@@ -4,7 +4,7 @@ import Link from 'next/link'
 import clsx from 'clsx'
 
 import { AudioPlayer } from '@/components/player/AudioPlayer'
-import posterImage from '@/images/logo.svg'
+import posterImage from '@/assets/images/periferico.jpg'
 
 function randomBetween(min, max, seed = 1) {
   return () => {
@@ -152,27 +152,27 @@ function AboutSection(props) {
           !isExpanded && 'lg:line-clamp-4'
         )}
       >
-        In this show, Eric and Wes dig deep to get to the facts with guests who
-        have been labeled villains by a society quick to judge, without actually
-        getting the full story. Tune in every Thursday to get to the truth with
-        another misunderstood outcast as they share the missing context in their
-        tragic tale.
+        O CeSIUM - Centro de estudantes de Engenharia Informática da
+        Universidade do Minho - é um grupo de estudantes voluntários, que tem
+        como objetivo representar e promover o curso de Engenharia Informática
+        na Universidade do Minho. O Periférico Podcast conta com a participação
+        de convidados relevantes nas diversas áreas e vertentes da Informática
+        em conversas relaxadas sem tópicos pré-definidos, mas que passam pela
+        nossa paixão conjunta por tecnologia.
       </p>
-      {!isExpanded && (
-        <button
-          type="button"
-          className="mt-2 hidden text-sm font-bold leading-6 text-orangecesium-500 hover:text-orangecesium-600 active:text-orangecesium-600 lg:inline-block"
-          onClick={() => setIsExpanded(true)}
-        >
-          Show more
-        </button>
-      )}
+      <button
+        type="button"
+        className="mt-2 hidden text-sm font-bold leading-6 text-orangecesium-500 hover:text-orangecesium-600 active:text-orangecesium-600 lg:inline-block"
+        onClick={() => setIsExpanded((latest) => !latest)}
+      >
+        {isExpanded ? 'Show Less' : 'Show More'}
+      </button>
     </section>
   )
 }
 
 export function Layout({ children }) {
-  let hosts = ['Eric Gordon', 'Wes Mantooth']
+  let hosts = ['Filipe Felício', 'Nelson Estevão']
 
   return (
     <>
@@ -209,11 +209,10 @@ export function Layout({ children }) {
           </Link>
           <div className="mt-10 text-center lg:mt-12 lg:text-left">
             <p className="text-xl font-bold text-slate-900">
-              <Link href="/">Their Side</Link>
+              <Link href="/">Periférico</Link>
             </p>
             <p className="mt-3 text-lg font-medium leading-8 text-slate-700">
-              Conversations with the most tragically misunderstood people of our
-              time.
+              CeSIUM - Centro de Estudantes de Engenharia Informática da UMinho
             </p>
           </div>
           <AboutSection className="mt-12 hidden lg:block" />
