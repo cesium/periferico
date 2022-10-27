@@ -280,7 +280,7 @@ export function Layout({ children }) {
         <div className="mx-auto px-4 sm:px-6 md:max-w-2xl md:px-4">
           <AboutSection />
           <h2 className="mt-8 flex items-center font-mono text-sm font-medium leading-7 text-slate-900">
-            <PersonIcon className="h-3 w-auto fill-slate-300" />
+            <PersonIcon className="h-3 w-auto fill-orangecesium-500" />
             <span className="ml-2.5">Hosted by</span>
           </h2>
           <div className="mt-2 flex gap-6 text-sm font-bold leading-7 text-slate-900">
