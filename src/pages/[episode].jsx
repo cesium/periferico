@@ -26,7 +26,7 @@ export default function Episode({ episode }) {
   return (
     <>
       <Head>
-        <title>{`${episode.title} - Their Side`}</title>
+        <title>{`${episode.title} - Periférico`}</title>
         <meta name="description" content={episode.description} />
       </Head>
       <article className="py-16 lg:py-36">
@@ -50,7 +50,7 @@ export default function Episode({ episode }) {
           </header>
           <hr className="my-12 border-gray-200" />
           <div
-            className="prose prose-slate mt-14 [&>h2]:mt-12 [&>h2]:flex [&>h2]:items-center [&>h2]:font-mono [&>h2]:text-sm [&>h2]:font-medium [&>h2]:leading-7 [&>h2]:text-slate-900 [&>h2]:before:mr-3 [&>h2]:before:h-3 [&>h2]:before:w-1.5 [&>h2]:before:rounded-r-full [&>h2]:before:bg-cyan-200 [&>ul]:mt-6 [&>ul]:list-['\2013\20'] [&>ul]:pl-5 [&>h2:nth-of-type(3n+2)]:before:bg-indigo-200 [&>h2:nth-of-type(3n)]:before:bg-violet-200"
+            className="prose prose-slate mt-14 [&>h2]:mt-12 [&>h2]:flex [&>h2]:items-center [&>h2]:font-mono [&>h2]:text-sm [&>h2]:font-medium [&>h2]:leading-7 [&>h2]:text-slate-900 [&>ul]:mt-6 [&>ul]:list-['\2013\20'] [&>ul]:pl-5"
             dangerouslySetInnerHTML={{ __html: episode.content }}
           />
         </Container>
@@ -68,7 +68,7 @@ export async function getStaticProps({ params }) {
     .map(({ title, contentSnippet, content, enclosure, pubDate }, index) => ({
       id: (feed.items.length - index).toString(),
       title,
-      description: contentSnippet,
+      description: contentSnippet.split('\n')[0],
       content,
       published: pubDate,
       audio: {

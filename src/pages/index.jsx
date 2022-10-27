@@ -100,13 +100,10 @@ export default function Home({ episodes }) {
   return (
     <>
       <Head>
-        <title>
-          Their Side - Conversations with the most tragically misunderstood
-          people of our time
-        </title>
+        <title>Periférico - CeSIUM</title>
         <meta
           name="description"
-          content="Conversations with the most tragically misunderstood people of our time."
+          content="CeSIUM - Centro de Estudantes de Engenharia Informática da UMinho - Podcast"
         />
       </Head>
       <div className="pt-16 pb-12 sm:pb-4 lg:pt-12">
@@ -137,7 +134,7 @@ export async function getStaticProps() {
           id: feed.items.length - index,
           title,
           published: pubDate,
-          description: contentSnippet,
+          description: contentSnippet.split('\n')[0],
           audio: {
             src: enclosure.url,
             type: enclosure.type,
