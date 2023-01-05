@@ -1,7 +1,8 @@
 import { useMemo } from 'react'
 import Head from 'next/head'
 import Parser from 'rss-parser'
-
+import ReactMarkdown from 'react-markdown'
+import rehypeRaw from "rehype-raw"
 import { useAudioPlayer } from '@/components/AudioProvider'
 import { Container } from '@/components/Container'
 import { FormattedDate } from '@/components/FormattedDate'
@@ -22,7 +23,6 @@ export default function Episode({ episode }) {
     [episode]
   )
   let player = useAudioPlayer(audioPlayerData)
-
   return (
     <>
       <Head>
@@ -49,10 +49,12 @@ export default function Episode({ episode }) {
             </p>
           </header>
           <hr className="my-12 border-gray-200" />
-          <div
+          <ReactMarkdown
             className="prose prose-slate mt-14 [&>h2]:mt-12 [&>h2]:flex [&>h2]:items-center [&>h2]:font-mono [&>h2]:text-sm [&>h2]:font-medium [&>h2]:leading-7 [&>h2]:text-slate-900 [&>ul]:mt-6 [&>ul]:list-['\2013\20'] [&>ul]:pl-5"
-            dangerouslySetInnerHTML={{ __html: episode.content }}
-          />
+            rehypePlugins={[rehypeRaw]}
+          >
+            {episode.content}
+          </ReactMarkdown>
         </Container>
       </article>
     </>
@@ -61,11 +63,10 @@ export default function Episode({ episode }) {
 
 export async function getStaticProps({ params }) {
   const parser = new Parser()
+  const feed = await parser.parseURL('https://anchor.fm/s/54719978/podcast/rss')
 
-  let feed = await parser.parseURL('https://anchor.fm/s/54719978/podcast/rss')
-
-  let episode = feed.items
-    .map(({ title, contentSnippet, content, enclosure, pubDate }, index) => ({
+  const episodes = feed.items.map(
+    ({ title, contentSnippet, content, enclosure, pubDate }, index) => ({
       id: (feed.items.length - index).toString(),
       title,
       description: contentSnippet.split('\n')[0],
@@ -75,12 +76,16 @@ export async function getStaticProps({ params }) {
         src: enclosure.url,
         type: enclosure.type,
       },
-    }))
-    .find(({ id }) => id === params.episode)
+    })
+  )
+
+  const episode = episodes.find(({ id }) => id === params.episode)
 
   if (!episode) {
     return {
-      notFound: true,
+      props: {
+        notFound: true,
+      },
     }
   }
 
@@ -94,15 +99,16 @@ export async function getStaticProps({ params }) {
 
 export async function getStaticPaths() {
   const parser = new Parser()
+  const feed = await parser.parseURL('https://anchor.fm/s/54719978/podcast/rss')
 
-  let feed = await parser.parseURL('https://anchor.fm/s/54719978/podcast/rss')
+  const paths = feed.items.map((_, index) => ({
+    params: {
+      episode: (feed.items.length - index).toString(),
+    },
+  }))
 
   return {
-    paths: feed.items.map(({}, index) => ({
-      params: {
-        episode: (feed.items.length - index).toString(),
-      },
-    })),
+    paths,
     fallback: 'blocking',
   }
 }

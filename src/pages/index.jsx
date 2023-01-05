@@ -122,25 +122,27 @@ export default function Home({ episodes }) {
   )
 }
 
+
 export async function getStaticProps() {
   const parser = new Parser()
+  const feed = await parser.parseURL('https://anchor.fm/s/54719978/podcast/rss')
 
-  let feed = await parser.parseURL('https://anchor.fm/s/54719978/podcast/rss')
+  const episodes = feed.items.map(
+    ({ title, contentSnippet, enclosure, pubDate }, index) => ({
+      id: feed.items.length - index, 
+      title,
+      published: pubDate,
+      description: contentSnippet.split('\n')[0],
+      audio: {
+        src: enclosure.url,
+        type: enclosure.type,
+      },
+    })
+  )
 
   return {
     props: {
-      episodes: feed.items.map(
-        ({ title, contentSnippet, enclosure, pubDate }, index) => ({
-          id: feed.items.length - index,
-          title,
-          published: pubDate,
-          description: contentSnippet.split('\n')[0],
-          audio: {
-            src: enclosure.url,
-            type: enclosure.type,
-          },
-        })
-      ),
+      episodes,
     },
     revalidate: 10,
   }
