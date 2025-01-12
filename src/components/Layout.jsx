@@ -4,7 +4,7 @@ import Link from 'next/link'
 import clsx from 'clsx'
 
 import { AudioPlayer } from '@/components/player/AudioPlayer'
-import posterImage from '@/assets/images/periferico.jpg'
+import posterImage from '@/assets/images/periferico.png'
 
 function randomBetween(min, max, seed = 1) {
   return () => {
