@@ -223,17 +223,7 @@ export function Layout({ children }) {
                   'https://podcasts.apple.com/us/podcast/perif%C3%A9rico/id1595801460',
                   ApplePodcastsIcon,
                 ],
-                [
-                  'Google Podcasts',
-                  'https://podcasts.google.com/feed/aHR0cHM6Ly9hbmNob3IuZm0vcy81NDcxOTk3OC9wb2RjYXN0L3Jzcw==',
-                  LinkIcon,
-                ],
                 ['Pocket Casts', 'https://pca.st/t8szxd90', LinkIcon],
-                [
-                  'Radio Public',
-                  'https://radiopublic.com/perifrico-WPbyKj',
-                  LinkIcon,
-                ],
                 [
                   'RSS Feed',
                   'https://anchor.fm/s/54719978/podcast/rss',
